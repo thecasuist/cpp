@@ -7,74 +7,95 @@
 // https://allalgorithms.com/data-scructures/
 // https://github.com/allalgorithms/cpp
 //
-// Contributed by: ANUJ MODI
-// Github: @descifrado
+// Contributed by: Afzal Rao
+// Github: @thecasuist
 //
-#include<stdio.h>
-#define max 50
-struct stack
-{
-	int ch[max];
-	int top;
+#include <iostream>
+using namespace std;
+
+struct node{ //Defn of an element of stack as a struct
+    int data;
+    node *link;
 };
-typedef struct stack Stack;
-void push(Stack *s, int x)
-{
-	if(s->top==max-1)
-		printf("ERROR: Stack Overflow\n");
-	else
-		s->ch[++s->top]=x;
+
+class stack{ 
+    node *top;
+    public:
+    int pop(); //Removes the topmost element 
+    void push(int x); //Pushes the element onto the top of the stack
+    void display();
+    stack(){ //Constructor to initialise the stack
+        top = NULL;
+    }
+};
+
+int stack::pop(){
+    if(top==NULL){
+        cout << "STACK UNDERFLOW\n";
+        return -1;
+    }
+    else{
+        int ans = top->data;
+        node *temp = top;
+        top = top->link;
+        delete temp;
+        return ans;
+    }
 }
-int pop(Stack *s)
-{
-	if(s->top==-1)
-	{
-		printf("ERROR: Stack Underflow\n");
-	}
-	else
-		return (s->ch[s->top--]);
+
+void stack::push(int x){
+    node *temp = new node;
+    if(temp){
+        temp->data = x;
+        temp->link = top;
+        top = temp;
+        cout << "Element successfully pushed\n";
+    }
+    else{
+        cout << "STACK OVERFLOW\n";
+    }    
 }
-int main()
-{
-	printf("Stack Has Been Initiated...\n");
-	Stack s;
-	s.top=-1;
-	int c;
-	while(1)
-	{
-		printf("\nEnter 1 to push an element\nEnter 2 to pop an element\nEnter 3 to display all the content of stack\nEnter 0 to exit\n");
-		scanf("%d",&c);
-		switch(c)
-		{
+
+void stack::display(){
+    node *temp = top;
+    while(temp!= NULL){
+        cout << temp->data << " ";
+        temp = temp->link;
+    }
+}
+
+int main(){
+    cout << "Stack has been initialised... \n";
+	stack s; int c;
+	while(1){
+		cout << "\nEnter 1 to push an element\nEnter 2 to pop an element\nEnter 3 to display all the content of stack\nEnter 0 to exit\n";
+		cin >> c;
+		switch(c){
 			case 0: return 0;
 			case 1:
 			{
-				printf("Enter element to be pushed\n");
+				cout << "Enter element to be pushed\n";
 				int x;
-				scanf("%d",&x);
-				push(&s,x);
-				printf("Element successfully pushed\n");
+				cin >> x;
+				s.push(x);
 				break;
 			}
 			case 2:
 			{
-				printf("Poped Element Is %d\n",pop(&s));
+				cout << "Poped Element Is " << s.pop() << endl;
 				break;
 			}
 			case 3:
 			{
-				printf("Stack has the following content in order LIFO\n");
-				int i;
-				for(i=s.top;i>=0;i--)
-				{
-					printf("%d ",s.ch[i]);
-				}
+				cout << "Stack has the following content in order LIFO\n";
+				s.display();
 				break;
 			}
 			default:
 			{
-				printf("Wrong Choice\n");
+				cout << "Wrong Choice\n";
 			}
 		}
 	}
+    return 0;
 }
